@@ -736,3 +736,82 @@ footer,
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* 黒版のファーストビューは静かな中央配置にする */
+.dark-page .hero {
+  text-align: center;
+}
+
+.dark-page .hero-content {
+  display: block;
+  min-height: 0;
+  padding-top: 0;
+}
+
+.dark-page .hero-content > p:first-child {
+  margin: 0;
+  color: #f3f3ef;
+  font-size: clamp(1.1rem, 2.6vw, 1.8rem);
+  letter-spacing: 0.35em;
+}
+
+.dark-page .hero h1 {
+  max-width: none;
+  margin: 0;
+  font-size: clamp(2.5rem, 7vw, 6.5rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: 0.03em;
+  text-wrap: wrap;
+}
+
+.dark-page .hero h1 span {
+  display: inline;
+  color: #f3f3ef;
+  -webkit-text-stroke: 0;
+}
+
+.dark-page .hero-logo {
+  width: clamp(64px, 7vw, 96px);
+}
+
+.dark-page .company-name {
+  margin: 18px 0 0;
+  color: #aab3b8;
+  font-size: clamp(11px, 1vw, 14px);
+  letter-spacing: 0.5em;
+}
+
+@media (max-width: 800px) {
+  .dark-page .hero-content {
+    display: block;
+    min-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .dark-page .hero-content > p:first-child {
+    letter-spacing: 0.22em;
+  }
+
+  .dark-page .hero h1 {
+    font-size: clamp(2.5rem, 11vw, 4.8rem);
+    line-height: 1.1;
+  }
+
+  .dark-page .hero h1 span {
+    display: block;
+  }
+
+  .dark-page .company-name {
+    margin-top: 18px;
+    font-size: clamp(11px, 1vw, 14px);
+    letter-spacing: 0.28em;
+  }
+}
+
+@media (max-width: 480px) {
+  .dark-page .hero h1 {
+    font-size: clamp(2.25rem, 13vw, 3.2rem);
+  }
+}
