@@ -54,6 +54,50 @@
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   const hero = document.querySelector(".hero");
   const heroContent = document.querySelector(".hero-content");
+  const counters = document.querySelectorAll("[data-count-to]");
+
+  const setCounterValue = (element, value) => {
+    const prefix = element.dataset.countPrefix || "";
+    const suffix = element.dataset.countSuffix || "";
+    element.textContent = `${prefix}${Math.round(value).toLocaleString("ja-JP")}${suffix}`;
+  };
+
+  const runCounter = (element) => {
+    if (element.dataset.counted === "true") return;
+    element.dataset.counted = "true";
+
+    const target = Number(element.dataset.countTo || 0);
+    if (!motionAllowed || !Number.isFinite(target)) {
+      setCounterValue(element, target);
+      return;
+    }
+
+    const startedAt = performance.now();
+    const duration = 1100;
+    const update = (now) => {
+      const progress = Math.min(1, (now - startedAt) / duration);
+      const eased = 1 - Math.pow(1 - progress, 4);
+      setCounterValue(element, target * eased);
+      if (progress < 1) window.requestAnimationFrame(update);
+    };
+    window.requestAnimationFrame(update);
+  };
+
+  if (motionAllowed) {
+    const counterObserver = new IntersectionObserver(
+      (entries, currentObserver) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          runCounter(entry.target);
+          currentObserver.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.35 },
+    );
+    counters.forEach((counter) => counterObserver.observe(counter));
+  } else {
+    counters.forEach(runCounter);
+  }
 
   if (motionAllowed && finePointer && hero && heroContent) {
     let animationFrame;
