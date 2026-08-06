@@ -51,9 +51,6 @@
   });
 
   const motionAllowed = window.matchMedia("(prefers-reduced-motion: no-preference)").matches;
-  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-  const hero = document.querySelector(".hero");
-  const heroContent = document.querySelector(".hero-content");
   const counters = document.querySelectorAll("[data-count-to]");
 
   const setCounterValue = (element, value) => {
@@ -97,29 +94,6 @@
     counters.forEach((counter) => counterObserver.observe(counter));
   } else {
     counters.forEach(runCounter);
-  }
-
-  if (motionAllowed && finePointer && hero && heroContent) {
-    let animationFrame;
-
-    hero.addEventListener("pointermove", (event) => {
-      const bounds = hero.getBoundingClientRect();
-      const x = (event.clientX - bounds.left) / bounds.width;
-      const y = (event.clientY - bounds.top) / bounds.height;
-
-      window.cancelAnimationFrame(animationFrame);
-      animationFrame = window.requestAnimationFrame(() => {
-        hero.style.setProperty("--pointer-x", `${x * 100}%`);
-        hero.style.setProperty("--pointer-y", `${y * 100}%`);
-        heroContent.style.transform = `translate3d(${(x - 0.5) * 12}px, ${(y - 0.5) * 8}px, 0)`;
-      });
-    });
-
-    hero.addEventListener("pointerleave", () => {
-      hero.style.setProperty("--pointer-x", "50%");
-      hero.style.setProperty("--pointer-y", "45%");
-      heroContent.style.transform = "";
-    });
   }
 
   const reveals = document.querySelectorAll(".reveal");

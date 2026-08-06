@@ -31,12 +31,12 @@ img { display: block; max-width: 100%; }
 .desktop-nav .contact-link { padding: 8px 14px; background: var(--indigo); color: #fff; }
 .menu-button, .mobile-nav { display: none; }
 
-.hero { --pointer-x: 50%; --pointer-y: 45%; position: relative; display: grid; min-height: 100svh; place-items: center; overflow: hidden; text-align: center; }
-.hero::after { position: absolute; inset: 0; background: radial-gradient(circle 22rem at var(--pointer-x) var(--pointer-y), #fff9 0, #f8e9bd2e 34%, transparent 72%); content: ""; pointer-events: none; mix-blend-mode: soft-light; }
+.hero { position: relative; display: grid; min-height: 100svh; place-items: center; overflow: hidden; text-align: center; }
+.hero::after { position: absolute; inset: 0; background: radial-gradient(circle 22rem at 50% 45%, #fff9 0, #f8e9bd2e 34%, transparent 72%); content: ""; pointer-events: none; mix-blend-mode: soft-light; }
 .hero-image, .hero-aurora { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .hero-image { animation: drift 22s ease-in-out infinite alternate; }
 .hero-aurora { background: linear-gradient(100deg, transparent 25%, #4685b620 45%, #bd913925 58%, transparent 78%); background-size: 250% 100%; animation: aurora 14s ease-in-out infinite alternate; }
-.hero-content { position: relative; z-index: 1; transition: transform .3s cubic-bezier(.2,.8,.2,1); will-change: transform; }
+.hero-content { position: relative; z-index: 1; }
 .hero-content > p:first-child { margin: 0; font-size: clamp(1.1rem, 2.6vw, 1.8rem); letter-spacing: .35em; }
 .hero-emblem { position: relative; display: grid; width: clamp(92px, 9vw, 128px); aspect-ratio: 1; margin: 30px auto 12px; place-items: center; }
 .hero-emblem::before, .hero-emblem::after, .hero-emblem i { position: absolute; inset: 5%; border: 1px solid #4685b64d; border-radius: 50%; content: ""; opacity: 0; animation: emblemRipple 5.4s cubic-bezier(.2,.6,.2,1) infinite; }
