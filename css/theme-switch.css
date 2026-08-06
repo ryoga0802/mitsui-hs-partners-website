@@ -23,6 +23,11 @@
   background: #fcfaf5;
 }
 
+.numbers strong > [data-count-to] {
+  color: inherit;
+  font: inherit;
+}
+
 @media (max-width: 1279px) {
   .mobile-nav .design-link {
     font-weight: 500;
