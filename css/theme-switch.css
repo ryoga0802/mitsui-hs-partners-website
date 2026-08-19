@@ -28,6 +28,46 @@
   font: inherit;
 }
 
+.proposal-route-bar {
+  position: fixed;
+  z-index: 80;
+  right: 18px;
+  bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  background: rgba(252, 250, 245, 0.94);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(12px);
+}
+
+.dark-page .proposal-route-bar {
+  background: rgba(8, 11, 15, 0.92);
+}
+
+.proposal-route-bar a,
+.proposal-route-bar strong {
+  display: grid;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 9px;
+  place-items: center;
+  color: var(--ink);
+  font: 500 11px var(--sans);
+  letter-spacing: 0.06em;
+  text-decoration: none;
+}
+
+.proposal-route-bar strong {
+  background: var(--deep);
+  color: #fff;
+}
+
+.dark-page .proposal-route-bar a { color: #f2f0e8; }
+.dark-page .proposal-route-bar strong { background: var(--gold); color: #090c10; }
+
 @media (max-width: 1279px) {
   .mobile-nav .design-link {
     font-weight: 500;
