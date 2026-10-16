@@ -54,13 +54,27 @@
   const maskedVideos = document.querySelectorAll("[data-masked-video]");
 
   if (maskedVideos.length) {
+    const visibleVideos = new Set();
+    const loopTimers = new Map();
+
+    const clearLoopTimer = (video) => {
+      const timer = loopTimers.get(video);
+      if (timer) window.clearTimeout(timer);
+      loopTimers.delete(video);
+    };
+
     const setVideoPlayback = (video, shouldPlay) => {
       if (!shouldPlay || document.hidden || !motionAllowed) {
+        clearLoopTimer(video);
         video.pause();
         video.dataset.videoState = "paused";
         return;
       }
 
+      if (loopTimers.has(video)) return;
+
+      if (video.ended) video.currentTime = 0;
+      video.playbackRate = Number(video.dataset.playbackRate || 0.72);
       const playAttempt = video.play();
       video.dataset.videoState = "playing";
       if (playAttempt) {
@@ -71,7 +85,6 @@
     };
 
     if (motionAllowed) {
-      const visibleVideos = new Set();
       const videoObserver = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
@@ -83,7 +96,26 @@
         { threshold: 0.08 },
       );
 
-      maskedVideos.forEach((video) => videoObserver.observe(video));
+      maskedVideos.forEach((video) => {
+        video.loop = false;
+        video.playbackRate = Number(video.dataset.playbackRate || 0.72);
+        video.addEventListener("ended", () => {
+          video.dataset.videoState = "holding";
+          clearLoopTimer(video);
+
+          const delay = Number(video.dataset.loopDelay || 1000);
+          const timer = window.setTimeout(() => {
+            loopTimers.delete(video);
+            if (visibleVideos.has(video) && !document.hidden) {
+              video.currentTime = 0;
+              setVideoPlayback(video, true);
+            }
+          }, delay);
+
+          loopTimers.set(video, timer);
+        });
+        videoObserver.observe(video);
+      });
       document.addEventListener("visibilitychange", () => {
         maskedVideos.forEach((video) => setVideoPlayback(video, visibleVideos.has(video)));
       });
