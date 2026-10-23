@@ -1,0 +1,9 @@
+{
+  "name": "mitsui-hs-partners-website",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build-pages.mjs",
+    "dev": "node scripts/preview-server.mjs",
+    "check": "node scripts/check-site.mjs"
+  }
+}

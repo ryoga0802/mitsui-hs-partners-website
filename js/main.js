@@ -23,32 +23,79 @@
     menuButton.setAttribute("aria-label", isOpen ? "メニューを閉じる" : "メニューを開く");
   });
 
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && menuButton.classList.contains("open")) {
+      closeMenu();
+      menuButton.focus();
+    }
+  });
+  window.matchMedia("(min-width: 1280px)").addEventListener("change", (event) => {
+    if (event.matches) closeMenu();
+  });
+
   const showToast = (message) => {
-    toast.textContent = `「${message}」ページは準備中です。`;
+    toast.textContent = message;
     toast.classList.add("show");
     window.clearTimeout(toastTimer);
     toastTimer = window.setTimeout(() => toast.classList.remove("show"), 3500);
   };
 
-  document.querySelectorAll("[data-coming-soon]").forEach((button) => {
-    button.addEventListener("click", () => {
-      closeMenu();
-      showToast(button.dataset.comingSoon);
-    });
-  });
-
   mobileNav.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeMenu));
 
   const agreement = document.querySelector("[data-agreement]");
   const submitButton = document.querySelector("[data-submit]");
-  agreement.addEventListener("change", () => {
+  agreement?.addEventListener("change", () => {
     submitButton.disabled = !agreement.checked;
   });
 
-  document.querySelector("[data-contact-form]").addEventListener("submit", (event) => {
+  document.querySelector("[data-contact-form]")?.addEventListener("submit", (event) => {
     event.preventDefault();
-    showToast("お問い合わせ（送信）");
+    showToast("このフォームはデモです。お問い合わせ内容は送信されません。");
   });
+
+  // Each listing owns its controls, items, and result count.
+  document.querySelectorAll("[data-listing]").forEach((listing) => {
+    const buttons = listing.querySelectorAll("[data-filter]");
+    const search = listing.querySelector("[data-search]");
+    const year = listing.querySelector("[data-year]");
+    const items = [...listing.querySelectorAll("[data-item]")];
+    const status = listing.querySelector("[data-results]");
+    const empty = listing.querySelector("[data-empty]");
+    let category = "all";
+    const update = () => {
+      const query = (search?.value || "").trim().normalize("NFKC").toLocaleLowerCase("ja");
+      let count = 0;
+      items.forEach((item) => {
+        const matches = (category === "all" || item.dataset.category === category)
+          && (!year?.value || item.dataset.year === year.value)
+          && (!query || item.textContent.normalize("NFKC").toLocaleLowerCase("ja").includes(query));
+        item.hidden = !matches;
+        if (matches) count++;
+      });
+      if (status) status.textContent = `${count}件を表示`;
+      if (empty) empty.hidden = count !== 0;
+    };
+    buttons.forEach((button) => button.addEventListener("click", () => {
+      category = button.dataset.filter;
+      buttons.forEach((control) => control.setAttribute("aria-pressed", String(control === button)));
+      update();
+    }));
+    search?.addEventListener("input", update);
+    year?.addEventListener("change", update);
+    update();
+  });
+
+  // Links from the homepage open their matching inline article.
+  const openHashTarget = () => {
+    let target;
+    try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch { return; }
+    if (!target) return;
+    const details = target.matches("details") ? target : target.closest("details");
+    if (details) details.open = true;
+    if (location.hash) target.scrollIntoView({ block: "start" });
+  };
+  window.addEventListener("hashchange", openHashTarget);
+  openHashTarget();
 
   const motionAllowed = window.matchMedia("(prefers-reduced-motion: no-preference)").matches;
   const maskedVideos = document.querySelectorAll("[data-masked-video]");
