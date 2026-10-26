@@ -4,7 +4,10 @@
   "trailingSlash": true,
   "redirects": [
     { "source": "/dark", "destination": "/", "permanent": true },
+    { "source": "/dark/", "destination": "/", "permanent": true },
     { "source": "/dark.html", "destination": "/", "permanent": true },
+    { "source": "/proposal-a/", "destination": "/", "permanent": true },
+    { "source": "/proposal-b/", "destination": "/", "permanent": true },
     { "source": "/proposal-a/:path*", "destination": "/", "permanent": true },
     { "source": "/proposal-b/:path*", "destination": "/", "permanent": true }
   ],
